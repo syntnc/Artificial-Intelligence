@@ -19,3 +19,11 @@ class Queue:
     def size(self):
         '''GIVES SIZE OF QUEUE'''
         return len(self.items)
+    
+    def front(self):
+        '''PEEKS AT THE FRONT OF QUEUE'''
+        return self.items[-1]
+
+    def rear(self):
+        '''PEEKS AT THE REAR OF QUEUE'''
+        return self.items[0]
