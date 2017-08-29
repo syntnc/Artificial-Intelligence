@@ -15,11 +15,11 @@ GRAPH = {\
             'Pitesti': {'Rimnicu': 97, 'Cralova': 138, 'Bucharest': 101},\
             'Bucharest': {'Faragas': 211, 'Pitesti': 101, 'Giurgiu': 90, 'Urziceni': 85},\
             'Giurgiu': {'Bucharest': 90},\
-            'Urziceni': {'Bucharest': 85, 'Vashui': 142, 'Hirsova': 98},\
-            'Hirsova': {'Urziceni': 98, 'Eforic': 86},\
-            'Eforic': {'Hirsova': 86},\
-            'Vashui': {'Iasi': 92, 'Urziceni': 142},\
-            'Iasi': {'Vashui': 92, 'Neamt': 87},\
+            'Urziceni': {'Bucharest': 85, 'Vaslui': 142, 'Hirsova': 98},\
+            'Hirsova': {'Urziceni': 98, 'Eforie': 86},\
+            'Eforie': {'Hirsova': 86},\
+            'Vaslui': {'Iasi': 92, 'Urziceni': 142},\
+            'Iasi': {'Vaslui': 92, 'Neamt': 87},\
             'Neamt': {'Iasi': 87}\
         }
 
