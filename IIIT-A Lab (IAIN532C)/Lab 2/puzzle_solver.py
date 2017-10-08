@@ -1,6 +1,6 @@
 '''GENERALIZED PUZZLE SOLVER'''
 from copy import deepcopy
-from heapq import heappush, heappop
+from queue import PriorityQueue
 
 class Node(object):
     '''NODE OF PUZZLE STATE TREE'''
@@ -10,6 +10,24 @@ class Node(object):
         self.operation = operation
         self.depth = depth
         self.cost = cost
+    
+    def __eq__(self, other):
+        return self.cost == other.cost
+
+    def __ne__(self, other):
+        return self.cost != other.cost
+    
+    def __lt__(self, other):
+        return self.cost < other.cost
+
+    def __le__(self, other):
+        return self.cost <= other.cost
+
+    def __gt__(self, other):
+        return self.cost > other.cost
+
+    def __ge__(self, other):
+        return self.cost >= other.cost
 
 SIZE = 0
 DIRECTIONS = ['UP', 'DOWN', 'LEFT', 'RIGHT']
@@ -125,31 +143,29 @@ class Puzzle(object):
                 stack = expanded_stack
         self.moves = None
 
-    @staticmethod
-    def heuristic_mismatch(state):
+    def heuristic_mismatch(self, state):
         '''HEURISTIC FUNCTION BASED ON THE NUMBER OF MISMATCHED TILES'''
         return sum(1 for i in range(SIZE)\
                 for j in range(SIZE) if state[i][j] != self.goal[i][j])
 
-    @staticmethod
-    def get_best_first_node(x):
+    def get_best_first_node(self, x):
         '''CREATE NODE FOR BEST-FIRST SEARCH PRIORITY QUEUE'''
-        return [Puzzle.heuristic_mismatch(x.state), x]
+        return self.heuristic_mismatch(x.state)
 
-    @staticmethod
-    def get_a_star_node(x):
+    def get_a_star_node(self, x):
         '''CREATE NODE FOR A-STAR SEARCH PRIORITY QUEUE'''
-        return [(x.depth + Puzzle.heuristic_mismatch(x.state)), x]
+        return x.depth + self.heuristic_mismatch(x.state)
 
     def best_first(self):
         '''START TO GOAL OF PUZZLE USING BEST-FIRST SEARCH'''
-        priority_queue = [Puzzle.get_best_first_node(Node(self.start, None, None, 0, 0))]
+        start_node = Node(self.start, None, None, 0, 0)
+        start_node.cost = self.get_best_first_node(start_node)
+        priority_queue = PriorityQueue()
+        priority_queue.put(start_node)
         visited = {}
         visited[Puzzle.get_state_tuple(self.start)] = 1
-        while True:
-            if priority_queue == []:
-                return
-            node = heappop(priority_queue)[1]
+        while not priority_queue.empty():            
+            node = priority_queue.get()
             if node.state == self.goal:
                 self.moves, temp = [], node
                 while True:
@@ -161,18 +177,20 @@ class Puzzle(object):
             expansion = Puzzle.expand_node(node, visited)
             for node in expansion:
                 visited[Puzzle.get_state_tuple(node.state)] = 1
-                heappush(priority_queue, Puzzle.get_best_first_node(node))
+                node.cost = self.get_best_first_node(node)
+                priority_queue.put(node)
         self.moves = None
 
     def a_star(self):
         '''START TO GOAL OF PUZZLE USING A-STAR SEARCH'''
-        priority_queue = [Puzzle.get_a_star_node(Node(self.start, None, None, 0, 0))]
+        start_node = Node(self.start, None, None, 0, 0)
+        start_node.cost = self.get_a_star_node(start_node)
+        priority_queue = PriorityQueue()
+        priority_queue.put(start_node)
         visited = {}
         visited[Puzzle.get_state_tuple(self.start)] = 1
-        while True:
-            if priority_queue == []:
-                return
-            node = heappop(priority_queue)[1]
+        while not priority_queue.empty():            
+            node = priority_queue.get()
             if node.state == self.goal:
                 self.moves, temp = [], node
                 while True:
@@ -184,5 +202,6 @@ class Puzzle(object):
             expansion = Puzzle.expand_node(node, visited)
             for node in expansion:
                 visited[Puzzle.get_state_tuple(node.state)] = 1
-                heappush(priority_queue, Puzzle.get_a_star_node(node))
+                node.cost = self.get_a_star_node(node)
+                priority_queue.put(node)
         self.moves = None
