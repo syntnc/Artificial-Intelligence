@@ -99,6 +99,23 @@ def ucs(graph, source, destination):
                 visited[next_node] = current_cost
                 priority_queue.put((current_cost, next_node, path + [next_node]))
 
+def a_star(graph, straight_line, source, destination):
+    '''OPTIMAL PATH FROM SOURCE TO DESTINATION USING STRAIGHT LINE DISTANCE HEURISTIC'''
+    from queue import PriorityQueue
+    priority_queue, visited = PriorityQueue(), {}
+    priority_queue.put((straight_line[source], 0, source, [source]))
+    visited[source] = straight_line[source]
+    while not priority_queue.empty():
+        (heuristic, cost, vertex, path) = priority_queue.get()
+        if vertex == destination:
+            return heuristic, cost, path
+        for next_node in graph[vertex].keys():
+            current_cost = cost + graph[vertex][next_node]
+            heuristic = current_cost + straight_line[next_node]
+            if not next_node in visited or visited[next_node] >= heuristic:
+                visited[next_node] = heuristic
+                priority_queue.put((heuristic, current_cost, next_node, path + [next_node]))
+
 def main():
     '''MAIN METHOD'''
     pass
