@@ -32,6 +32,22 @@ def dfs_paths(source, destination, path=None):
     for next_node in set(GRAPH[source].keys()) - set(path):
         yield from dfs_paths(next_node, destination, path + [next_node])
 
+def ucs(source, destination):
+    '''CHEAPEST PATH FROM SOURCE TO DESTINATION USING UNIFORM COST SEARCH'''
+    from queue import PriorityQueue
+    priority_queue, visited = PriorityQueue(), {}
+    priority_queue.put((0, source, [source]))
+    visited[source] = 0
+    while not priority_queue.empty():
+        (cost, vertex, path) = priority_queue.get()
+        if vertex == destination:
+            return cost, path
+        for next_node in GRAPH[vertex].keys():
+            current_cost = cost + GRAPH[vertex][next_node]
+            if not next_node in visited or visited[next_node] >= current_cost:
+                visited[next_node] = current_cost
+                priority_queue.put((current_cost, next_node, path + [next_node]))
+
 def main():
     '''MAIN FUNCTION'''
     print('ENTER SOURCE :', end=' ')
@@ -41,9 +57,14 @@ def main():
     if source not in GRAPH or goal not in GRAPH:
         print('ERROR: CITY DOES NOT EXIST.')
     else:
+        print('\nALL POSSIBLE PATHS:')
         paths = dfs_paths(source, goal)
         for path in paths:
             print(' -> '.join(city for city in path))
+        print('\nCHEAPEST PATH:')
+        cost, cheapest_path = ucs(source, goal)
+        print('PATH COST =', cost)
+        print(' -> '.join(city for city in cheapest_path))
 
 if __name__ == '__main__':
     main()
