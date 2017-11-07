@@ -12,6 +12,9 @@ class Student(object):
         self.friends = friends
         self.remaining_seats = [(row, column) for column in range(N) for row in range(M)]
         self.sitting = False
+    
+    def __repr__(self):
+        return self.roll_no
 
 def seat_exists(x, y):
     '''CHECKS IF X AND Y VALUE IS INSIDE MATRIX'''
@@ -30,8 +33,11 @@ def make_graph():
 def check_valid(student, seat):
     '''CHECKS IF A PARTICULAR SEAT IS VALID FOR A PARTICULAR STUDENT'''
     for dx, dy in ADJACENT:
-        if seat_exists(seat[0] + dx, seat[1] + dy) and SEAT_MATRIX[seat[0] + dx][seat[1] + dy].roll_no in GRAPH[student.roll_no]:
-            return False
+        if seat_exists(seat[0] + dx, seat[1] + dy):
+            if SEAT_MATRIX[seat[0] + dx][seat[1] + dy] is None:
+                 continue
+            if SEAT_MATRIX[seat[0] + dx][seat[1] + dy].roll_no in GRAPH[student.roll_no]:
+                return False
     return True
 
 def set_seat(student, seat):
@@ -72,9 +78,9 @@ HEURISTICS USED:
 
 def backtrack(seat):
     '''BACKTRACK WITH MINIMUM REMAINING VALUES HEURISTIC, FOLLOWED BY DEGREE HEURISTIC IN ROW-MAJOR FORMAT'''
-    STUDENTS.sort(key=lambda x: (len(x.remaining_seats), -len(x.friends), x.roll_no))
+    STUDENTS.sort(key=lambda x: (len(x.remaining_seats), len(x.friends), x.roll_no))
     for student in STUDENTS:
-        if not student.seating and check_valid(student, seat):
+        if not student.sitting and check_valid(student, seat):
             set_seat(student, seat)
             if seat == (M - 1, N - 1):
                 return True
