@@ -1,4 +1,4 @@
-'''SOLVING PACMAN PROBLEM USING DFS'''
+'''SOLVING PACMAN PROBLEM USING BFS'''
 
 from copy import deepcopy
 
@@ -11,7 +11,7 @@ def move_next(grid, coordinate):
     next_moves = []
     for direction in DIRECTIONS:
         next_x, next_y = coordinate['x'] + MOVES[direction][0], coordinate['y'] + MOVES[direction][1]
-        if next_x < 0 or next_x >= ROWS or next_y < 0 and next_y >= COLUMNS:
+        if next_x < 0 or next_x >= ROWS or next_y < 0 or next_y >= COLUMNS:
             continue
         if grid[next_x][next_y] == '-' or grid[next_x][next_y] == '.':
             grid[next_x][next_y] = '='
