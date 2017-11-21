@@ -14,6 +14,21 @@ def get_graph():
         GRAPH[vertex_b].add(vertex_a)
     N_COLOURS = int(input().strip())
 
+def heuristic_variable(domains):
+    '''MINIMUM REMAINING VAlUE AND DEGREE HEURISTIC'''
+    return min([state for state in GRAPH if COLOURED_STATES[state] is None], key=lambda x: (len(domains[x]), -len(GRAPH[x])))       
+
+def heuristic_value(domains, state):
+    '''LEAST CONSTRAINED VLAUE HEURISTIC'''
+    from queue import PriorityQueue
+    priority_queue = PriorityQueue()
+    for colour in domains[state]:
+        priority_queue.put((sum(1 for neighbour in GRAPH[state] if colour in domains[neighbour]), colour))
+    ordered_values = []
+    while not priority_queue.empty():
+        ordered_values.append(priority_queue.get()[1])
+    return ordered_values
+
 def ac3(level, domains):
     '''MAINTAINS ARC CONSISTENCY'''
     queue = []
@@ -38,13 +53,15 @@ def colour_graph(level, domains):
     global COLOURED_STATES
     if level == len(GRAPH.keys()):
         return True
-    for colour in domains[level]:
-        COLOURED_STATES[level] = colour
+    selected_state = heuristic_variable(domains)
+    ordered_domain = heuristic_value(domains, selected_state)
+    for colour in ordered_domain:
+        COLOURED_STATES[selected_state] = colour
         new_domains = deepcopy(domains)
         if ac3(level, new_domains):
             if colour_graph(level + 1, new_domains):
                 return True
-        COLOURED_STATES[level] = None
+        COLOURED_STATES[selected_state] = None
     return False
 
 def main():
