@@ -49,8 +49,7 @@ def dijkstra(graph, source):
     global INFINITY
     priority_queue = []
     visited, distance = {}, {}
-
-    visited[source], distance[source] = True, 0
+    distance[source] = 0
     heapq.heappush(priority_queue, (0, source))
 
     while priority_queue:
