@@ -1,3 +1,4 @@
+SEARCH ALGORITHM :dfs
 NUMBER OF MOVES : 2
 ------------------
 1	|	2	|	3
