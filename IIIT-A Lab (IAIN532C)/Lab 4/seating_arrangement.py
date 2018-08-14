@@ -6,7 +6,7 @@ ADJACENT.remove((0, 0))
 SEAT_MATRIX = None
 
 class Student(object):
-    '''STUDENT NODE'''
+    """Student Class"""
     def __init__(self, roll_no, friends):
         self.roll_no = roll_no
         self.friends = friends
@@ -17,11 +17,17 @@ class Student(object):
         return self.roll_no
 
 def seat_exists(x, y):
-    '''CHECKS IF X AND Y VALUE IS INSIDE MATRIX'''
-    return x >= 0 and x < M and y >= 0 and y < N
+    """Checks if x and y value is inside matrix
+
+    :param x: x-coordinate of seat matrix
+    :param y: y-coordinate of seat matrix
+    :returns: Boolean value whether (x, y) is inside matrix
+
+    """
+    return 0 <= x < M and 0 <= y < N
 
 def make_graph():
-    '''MAKES CSP GRAPH OF STUDENTS AND THEIR ENEMIES'''
+    """Makes CSP graph of students and their enemies"""
     global GRAPH
     GRAPH = {}
     for student in STUDENTS:
@@ -31,7 +37,13 @@ def make_graph():
                 GRAPH[student.roll_no] += [other_student.roll_no]
 
 def check_valid(student, seat):
-    '''CHECKS IF A PARTICULAR SEAT IS VALID FOR A PARTICULAR STUDENT'''
+    """Checks if a particular seat is valid for a particular student
+
+    :param student: Student object
+    :param seat: Tuple of x and y coordinates of a seat
+    :returns: True if seat is valid, otherwise False
+
+    """
     for dx, dy in ADJACENT:
         if seat_exists(seat[0] + dx, seat[1] + dy):
             if SEAT_MATRIX[seat[0] + dx][seat[1] + dy] is None:
@@ -41,7 +53,13 @@ def check_valid(student, seat):
     return True
 
 def set_seat(student, seat):
-    '''SETS SEAT FOR STUDENT, RETURNS FALSE IF NO SEAT AVAILABLE'''
+    """Sets seat for student
+
+    :param student: Student object
+    :param seat: Tuple of x and y coordinates of a seat
+    :returns: True if seat is available, otherwise False
+
+    """
     if seat in student.remaining_seats and check_valid(student, seat):
         SEAT_MATRIX[seat[0]][seat[1]] = student
         student.sitting = True
@@ -51,7 +69,12 @@ def set_seat(student, seat):
         return True
 
 def remove_seat(student, seat):
-    '''REMOVE STUDENT FROM SEAT'''
+    """REMOVE STUDENT FROM SEAT
+
+    :param student: Student object
+    :param seat: Tuple of x and y coordinates of a seat
+
+    """
     SEAT_MATRIX[seat[0]][seat[1]] = None
     student.sitting = False
     for other_student in STUDENTS:
@@ -60,7 +83,7 @@ def remove_seat(student, seat):
 
 # DOESN'T WORK
 def arc_consistency():
-    '''APPLIES ARC CONSISTENCY TO THE CSP GRAPH'''
+    """Applies arc consistency to the CSP graph"""
     for student in STUDENTS:
         for other_student in STUDENTS:
             if other_student.roll_no in GRAPH[student.roll_no]:
@@ -77,7 +100,12 @@ HEURISTICS USED:
 '''
 
 def backtrack(seat):
-    '''BACKTRACK WITH MINIMUM REMAINING VALUES HEURISTIC, FOLLOWED BY DEGREE HEURISTIC IN ROW-MAJOR FORMAT'''
+    """Backtrack with minimum remaining values heuristic,
+    followed by degree heuristic in row-major format
+
+    :param seat: Tuple of x and y coordinates of a seat
+
+    """
     STUDENTS.sort(key=lambda x: (len(x.remaining_seats), len(x.friends), x.roll_no))
     for student in STUDENTS:
         if not student.sitting and check_valid(student, seat):
@@ -94,13 +122,14 @@ def backtrack(seat):
     return False
 
 def print_seating_arrangement():
-    '''DISPLAYS THE SEATING ARRANGEMENT'''
+    """Displays the seating arrangemenT"""
     for row in range(M):
         for column in range(N):
             print(SEAT_MATRIX[row][column], end='\t')
         print()
 
 def main():
+    """Main method"""
     global STUDENTS, SEAT_MATRIX, M, N
     t = int(input())
     for _ in range(t):
