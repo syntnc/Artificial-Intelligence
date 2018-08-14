@@ -1,4 +1,4 @@
-'''ALL POSSIBLE PATH PROBLEM FOR ROMANIAN CITIES'''
+"""All possible path problem for romanian cities"""
 
 GRAPH = {\
             'Arad': {'Sibiu': 140, 'Zerind': 75, 'Timisoara': 118},\
@@ -24,7 +24,14 @@ GRAPH = {\
         }
 
 def dfs_paths(source, destination, path=None):
-    '''ALL POSSIBLE PATHS FROM SOURCE TO DESTINATION USING DEPTH-FIRST SEARCH'''
+    """All possible paths from source to destination using depth-first search
+
+    :param source: Source city name
+    :param destination: Destination city name
+    :param path: Current traversed path (Default value = None)
+    :yields: All possible paths from source to destination
+
+    """
     if path is None:
         path = [source]
     if source == destination:
@@ -33,7 +40,13 @@ def dfs_paths(source, destination, path=None):
         yield from dfs_paths(next_node, destination, path + [next_node])
 
 def ucs(source, destination):
-    '''CHEAPEST PATH FROM SOURCE TO DESTINATION USING UNIFORM COST SEARCH'''
+    """Cheapest path from source to destination using uniform cost search
+
+    :param source: Source city name
+    :param destination: Destination city name
+    :returns: Cost and path for cheapest traversal
+
+    """
     from queue import PriorityQueue
     priority_queue, visited = PriorityQueue(), {}
     priority_queue.put((0, source, [source]))
@@ -49,7 +62,13 @@ def ucs(source, destination):
                 priority_queue.put((current_cost, next_node, path + [next_node]))
 
 def a_star(source, destination):
-    '''OPTIMAL PATH FROM SOURCE TO DESTINATION USING STRAIGHT LINE DISTANCE HEURISTIC'''
+    """Optimal path from source to destination using straight line distance heuristic
+
+    :param source: Source city name
+    :param destination: Destination city name
+    :returns: Heuristic value, cost and path for optimal traversal
+
+    """
     # HERE THE STRAIGHT LINE DISTANCE VALUES ARE IN REFERENCE TO BUCHAREST AS THE DESTINATION
     straight_line = {\
                         'Arad': 366,\
@@ -89,7 +108,7 @@ def a_star(source, destination):
                 priority_queue.put((heuristic, current_cost, next_node, path + [next_node]))
 
 def main():
-    '''MAIN FUNCTION'''
+    """Main function"""
     print('ENTER SOURCE :', end=' ')
     source = input().strip()
     print('ENTER GOAL :', end=' ')
@@ -107,7 +126,7 @@ def main():
         print(' -> '.join(city for city in cheapest_path))
         print('\nOPTIMAL PATH:')
         heuristic, cost, optimal_path = a_star(source, goal)
-        print('HEURISTIC = ', heuristic)
+        print('HEURISTIC =', heuristic)
         print('PATH COST =', cost)
         print(' -> '.join(city for city in optimal_path))
 
