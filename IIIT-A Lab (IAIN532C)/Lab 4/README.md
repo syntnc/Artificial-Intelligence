@@ -1,5 +1,5 @@
 # Lab 4
-## Backtracking
+## Backtracking: Constraint Satisfaction Problem
 
 <img src="https://img.shields.io/badge/language-Python3-brightgreen.svg"/>
 <img src="https://img.shields.io/badge/VS Code-1.10.2-blue.svg"/>  
