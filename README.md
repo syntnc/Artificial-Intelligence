@@ -44,7 +44,7 @@
 
 * All solutions of laboratory problems are in Python3 and is present in `IIIT-A Lab (IAIN532C)` directory.
 * Lab assignments are present in `Lab *` directories.
-  + [Lab 1: Implementing Stack, Que and Hashmap in Python](https://github.com/coderIlluminatus/Artificial-Intelligence/tree/master/IIIT-A%20Lab%20(IAIN532C)/Lab%201)
+  + [Lab 1: Implementing Stack, Queue and Hashtable in Python](https://github.com/coderIlluminatus/Artificial-Intelligence/tree/master/IIIT-A%20Lab%20(IAIN532C)/Lab%201)
   + [Lab 2: Searching Algorithms on 8-Puzzle, 15-Puzzle and Romanian Map](https://github.com/coderIlluminatus/Artificial-Intelligence/tree/master/IIIT-A%20Lab%20(IAIN532C)/Lab%202)
   + [Lab 3: Searching on PacMan (HackerRank)](https://github.com/coderIlluminatus/Artificial-Intelligence/tree/master/IIIT-A%20Lab%20(IAIN532C)/Lab%203)
   + [Lab 4: Backtracking CSP on Seating Arrangemnt Problem](https://github.com/coderIlluminatus/Artificial-Intelligence/tree/master/IIIT-A%20Lab%20(IAIN532C)/Lab%204)
