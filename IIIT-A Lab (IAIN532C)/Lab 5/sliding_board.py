@@ -4,22 +4,44 @@ STACK, VISITED = None, None
 N = 0
 
 def row_rotate(state, row):
-    '''ROTATE ROW BY 1 UNIT RIGHTWARDS'''
+    """Rotate row by 1 unit rightwards
+
+    :param state: 2D list depicting the current board
+    :param row: Row index to be rotated
+
+    """
     state[row] = state[row][-1:] + state[row][:-1]
 
 def column_rotate(state, column):
-    '''ROTATE COLUMN BY 1 UNIT DOWNWARDS'''
+    """Rotate column by 1 unit downwards
+
+    :param state: 2D list depicting the current board
+    :param column: Column index to be rotated
+
+    """
     saved = state[-1][column]
     for row in range(N - 2, -1, -1):
         state[row + 1][column] = state[row][column]
     state[0][column] = saved
 
 def make_tuple(state):
-    '''MAKES IMMUTABLE FORM OF A STATE'''
+    """Makes immutable form of a state
+
+    :param state: 2D list depicting the current board
+    :returns: Tuple depicting the current board
+
+    """
     return tuple([tuple(row) for row in state])
 
 def dls(state, goal, depth):
-    '''DEPTH-LIMITED SEARCH'''
+    """Depth-limited search from source to goal state
+
+    :param state: 2D list depicting the current board
+    :param goal: 2D list depicting the board in goal state
+    :param depth: Depth limit for searching
+    :returns: Booolean whether goal state is found
+
+    """
     global STACK, VISITED
     if state == goal:
         if make_tuple(state) not in VISITED:
@@ -53,18 +75,28 @@ def dls(state, goal, depth):
     return False
 
 def iterative_deepening(source, goal):
-    '''ITERATIVE DEEPENING SEARCH'''
+    """Iterative deepening search from source to goal state
+
+    :param source: 2D list depicting the current board
+    :param goal: 2D list depicting the board in the goal state
+    :returns: Boolean whether iterative deepening search finds goal state
+
+    """
     for depth in range(100):
         if dls(source, goal, depth):
             return True
     return False
 
 def print_state(state):
-    '''DISPLAYS THE STATE'''
+    """Displays the state
+
+    :param state: 2D list depicting the current board
+
+    """
     print(' '.join([' '.join([str(state[row][column]) for column in range(N)]) for row in range(N)]))
 
 def main():
-    '''MAIN FUNCTION'''
+    """Main method"""
     global N, STACK, VISITED
     t = int(input())
     for _ in range(t):

@@ -1,3 +1,5 @@
+from math import sqrt
+
 DIRECTIONS = ['E', 'SE', 'S', 'SW', 'W', 'NW', 'N', 'NE']
 MOVES = {'NE':[-1, 1], 'N':[-1, 0], 'NW':[-1, -1], 'W':[0, -1], 'E':[0, 1], 'SE':[1, 1], 'S':[1, 0], 'SW':[1, -1]}
 M, N = 0, 0
@@ -5,13 +7,19 @@ GRID = None
 STACK = None
 
 class Node(object):
+    """State class"""
     def __init__(self, cost, coordinate):
         self.cost = cost
         self.coordinate = coordinate
         
 def move_next(node):
-    '''GETS NEXT VALID MOVES IN ALL EIGHT DIRECTIONS FROM CURRENT COORDINATE'''
-    from math import sqrt
+    """Gets next valid moves in all eight directions from current coordinate
+
+    :param node: Current state object
+    :param current_path: List of coordinates already visited in the current path
+    :returns: List of valid moves in all directions from current state
+
+    """
     next_moves = []
     for direction in DIRECTIONS:
         step_cost = 1 if direction in {'N', 'E', 'W', 'S'} else sqrt(2)
@@ -23,11 +31,22 @@ def move_next(node):
     return next_moves
 
 def is_goal(coordinate):
-    '''CHECKS IF GEM IS PRESENT AT THE CURRENT COORDINATE'''
+    """Checks if gem is present at the current coordinate
+
+    :param coordinate: Tuple of x and y coordinates
+    :returns: Boolean whther the gem is present at the given coordinate
+
+    """
     return GRID[coordinate['x']][coordinate['y']] == 1
 
 def dls(node, depth):
-    '''DEPTH-LIMITED SEARCH FROM SOURCE TO GOAL'''
+    """Depth-limited search from source to goal
+
+    :param node: State object
+    :param depth: Depth limit for searching
+    :returns: Boolean whether goal state is found
+
+    """
     global STACK
     if depth < 0:
         return False
@@ -41,14 +60,19 @@ def dls(node, depth):
     return False
 
 def iterative_deepening(source):
-    '''ITERATIVE DEEPENING SEARCH'''
+    """Iterative deepening search from source to goal
+
+    :param source: State object of current position
+    :returns: Boolean whether iterative deepening search finds goal position
+
+    """
     for depth in range(100):
         if dls(source, depth):
             return True
     return False
 
 def main():
-    '''MAIN FUNCTION'''
+    """Main method"""
     global M, N, GRID, STACK
     t = int(input())
     for _ in range(t):

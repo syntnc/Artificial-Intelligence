@@ -1,5 +1,7 @@
 from copy import deepcopy
 from functools import total_ordering
+from math import sqrt
+from queue import PriorityQueue
 
 DIRECTIONS = ['E', 'SE', 'S', 'SW', 'W', 'NW', 'N', 'NE']
 MOVES = {'NE':[-1, 1, 7], 'N':[-1, 0, 6], 'NW':[-1, -1, 5], 'W':[0, -1, 4], 'E':[0, 1, 0], 'SE':[1, 1, 1], 'S':[1, 0, 2], 'SW':[1, -1, 3]}
@@ -9,6 +11,7 @@ TIME = 0
 
 @total_ordering
 class Node(object):
+    """State class"""
     def __init__(self, cost, time, coordinate, parent, face):
         self.cost = cost
         self.time = time
@@ -26,8 +29,13 @@ class Node(object):
         return (self.cost, self.time) < (other.cost, other.time)
 
 def move_next(node):
-    '''GETS NEXT VALID MOVES IN ALL EIGHT DIRECTIONS FROM CURRENT COORDINATE'''
-    from math import sqrt
+    """Gets next valid moves in all eight directions from current coordinate
+
+    :param node: Current state object
+    :param current_path: List of coordinates already visited in the current path
+    :returns: List of valid moves in all directions from current state
+
+    """
     global TIME
     next_moves = []
     for direction in DIRECTIONS:
@@ -43,12 +51,21 @@ def move_next(node):
     return next_moves
 
 def is_goal(coordinate):
-    '''CHECKS IF GEM IS PRESENT AT THE CURRENT COORDINATE'''
+    """Checks if gem is present at the current coordinate
+
+    :param coordinate: Tuple of x and y coordinates
+    :returns: Boolean whther the gem is present at the given coordinate
+
+    """
     return GRID[coordinate['x']][coordinate['y']] == 1
 
 def search(source):
-    '''DIJKSTRA SEARCH FROM SOURCE TO GOAL'''
-    from queue import PriorityQueue
+    """Dijkstra search from source to goal
+
+    :param source: Tuple of x and y coordinates of the initial position
+    :returns: Path traversed from source to goal position
+
+    """
     queue = PriorityQueue()
     starting_node = Node(0, TIME, source, None, 0)
     queue.put(starting_node)
@@ -73,7 +90,7 @@ def search(source):
     return path
 
 def main():
-    '''MAIN FUNCTION'''
+    """Main method"""
     global M, N, GRID, TIME
     t = int(input())
     for _ in range(t):

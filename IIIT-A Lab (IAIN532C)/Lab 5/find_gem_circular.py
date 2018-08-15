@@ -1,5 +1,7 @@
 from copy import deepcopy
 from functools import total_ordering
+from math import sqrt
+from queue import PriorityQueue
 
 INFINITY = 10 ** 9
 DIRECTIONS = ['E', 'SE', 'S', 'SW', 'W', 'NW', 'N', 'NE']
@@ -10,6 +12,7 @@ TIME = 0
 
 @total_ordering
 class Node(object):
+    """State class"""
     def __init__(self, cost, coordinate, path, parent):
         self.cost = cost
         self.coordinate = coordinate
@@ -23,8 +26,13 @@ class Node(object):
         return self.cost < other.cost
 
 def move_next(node, current_path):
-    '''GETS NEXT VALID MOVES IN ALL EIGHT DIRECTIONS FROM CURRENT COORDINATE'''
-    from math import sqrt
+    """Gets next valid moves in all eight directions from current coordinate
+
+    :param node: Current state object
+    :param current_path: List of coordinates already visited in the current path
+    :returns: List of valid moves in all directions from current state
+
+    """
     global TIME
     next_moves = []
     for direction in DIRECTIONS:
@@ -38,12 +46,21 @@ def move_next(node, current_path):
     return next_moves
 
 def is_goal(coordinate):
-    '''CHECKS IF GEM IS PRESENT AT THE CURRENT COORDINATE'''
+    """Checks if gem is present at the current coordinate
+
+    :param coordinate: Tuple of x and y coordinates
+    :returns: Boolean whther the gem is present at the given coordinate
+
+    """
     return GRID[coordinate[0]][coordinate[1]] == 1
 
 def search(source):
-    '''SEARCH FROM SOURCE TO GOAL'''
-    from queue import PriorityQueue
+    """Search from source to goal
+
+    :param source: Tuple of x and y coordinates of the initial position
+    :returns: Path traversed from source to goal position
+
+    """
     queue, visited = PriorityQueue(), {}
     queue.put(Node((0, TIME), source, [], None))
     distance = {}
@@ -51,8 +68,7 @@ def search(source):
     path = None
     while not queue.empty():
         node = queue.get()
-        
-        print(node.coordinate)
+
         if node.coordinate in visited:
             continue
 
@@ -75,7 +91,7 @@ def search(source):
     return path
 
 def main():
-    '''MAIN FUNCTION'''
+    """Main method"""
     global M, N, GRID
     t = int(input())
     for _ in range(t):
